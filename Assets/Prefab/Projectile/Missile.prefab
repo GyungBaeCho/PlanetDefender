@@ -100,14 +100,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _projectileSpeed: 0
+  _arrDeathParticlePerfab:
+  - {fileID: 1576138660658782, guid: f7d41eb98a11b944ba9ae268d3dea414, type: 2}
+  - {fileID: 1550850606902756, guid: e253145fb6ae349408f13c20e87c30b6, type: 2}
   _accelSpeed: 500
   _launchSpeed: 400
   _launchDecrease: 1000
   _tailParticlePrefab: {fileID: 1714298923618848, guid: dfac6f0090010a64b866f6561fb5210c,
     type: 2}
-  _arrDeathParticlePerfab:
-  - {fileID: 1576138660658782, guid: f7d41eb98a11b944ba9ae268d3dea414, type: 2}
-  - {fileID: 1550850606902756, guid: e253145fb6ae349408f13c20e87c30b6, type: 2}
 --- !u!212 &212035027928113112
 SpriteRenderer:
   m_ObjectHideFlags: 1

@@ -31,18 +31,16 @@ public class Tower : MonoBehaviour
 
         for (int i = 0; i < _lstBullet.Count; ++i)
         {
-            GameObject pvtBullet = _lstBullet[i];
-            if (pvtBullet != null)
-            {
-                Vector3 bulletScreenPos = Camera.main.WorldToScreenPoint(pvtBullet.transform.position);
+            //GameObject pvtBullet = _lstBullet[i];
 
-                float plusAlpha = 100;
-                if (Screen.width + plusAlpha <= bulletScreenPos.x || bulletScreenPos.x <= -plusAlpha || Screen.height + plusAlpha <= bulletScreenPos.y || bulletScreenPos.y <= -plusAlpha)
-                {
-                    pvtBullet.GetComponent<Projectile>().Destroy();
-                    Destroy(pvtBullet);
-                    _lstBullet.Remove(pvtBullet);
-                }
+            //if (pvtBullet == null)
+            //{
+            //    _lstBullet.Remove(pvtBullet);
+            //}
+
+            if (_lstBullet[i] == null)
+            {
+                _lstBullet.RemoveAt(i);
             }
         }
     }

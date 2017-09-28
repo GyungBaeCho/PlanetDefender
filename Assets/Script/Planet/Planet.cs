@@ -25,7 +25,7 @@ public class Planet : MonoBehaviour
             _arrTower[i] = (GameObject)Instantiate(_arrTowerPrefab[i%_arrTowerPrefab.Length], transform.position, transform.rotation);
 
             float fHeight = 170;
-            //            fHeight += arrTowerPrefab[i % arrTowerPrefab.Length].GetComponent<SpriteRenderer>().sprite.textureRect.height/2;
+            //fHeight += arrTowerPrefab[i % arrTowerPrefab.Length].GetComponent<SpriteRenderer>().sprite.textureRect.height/2;
             _arrTower[i].transform.position += new Vector3(0, fHeight, 0);
             _arrTower[i].transform.RotateAround(transform.position, new Vector3(0, 0, 1), fAngle * i);
         }

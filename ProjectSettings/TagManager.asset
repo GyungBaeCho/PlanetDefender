@@ -7,6 +7,7 @@ TagManager:
   - Projectile
   - Enemy
   - Planet
+  - Radar
   layers:
   - Default
   - TransparentFX
@@ -43,7 +44,4 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
-    locked: 0
-  - name: New Layer
-    uniqueID: 2493513101
     locked: 0

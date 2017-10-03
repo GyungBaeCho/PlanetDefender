@@ -7,17 +7,21 @@ using UnityEngine.EventSystems;
 public class SteerHelm : MonoBehaviour, IDragHandler, IPointerUpHandler, IPointerDownHandler {
     private Image           _bgImg;
     private Vector2         _prePos = Vector2.zero;
+
     private bool            _bFirstTouch = true;
     private bool            _bBeingTouched = false;
+
     private float           _fDegree = 0;
     private float           _fRotatingPower = 0;
+    private float           _fMinAlpha = 0.1f;
 
     public float            _fFriction;
     public float            _fTouchFriction;
     public Planet           _planet;
 
     // Use this for initialization
-    void Start () {
+    void Start ()
+    {
         _bgImg = GetComponent<Image>();
     }
 
@@ -57,6 +61,9 @@ public class SteerHelm : MonoBehaviour, IDragHandler, IPointerUpHandler, IPointe
     public virtual void OnPointerDown(PointerEventData ped)
     {
         _bBeingTouched = true;
+
+        //터치시 UI Alpha 최대 불투명
+        _bgImg.CrossFadeAlpha(1, 0.5f, true);
     }
 
     //터치를 중지했을때 firstThouch 초기화
@@ -106,6 +113,12 @@ public class SteerHelm : MonoBehaviour, IDragHandler, IPointerUpHandler, IPointe
             _planet.RevoluteTower(_fRotatingPower/10);
             transform.Rotate(0, 0, _fRotatingPower * Time.deltaTime);   
         }
+
+        //비터치시, RotatingPower Zero시 UI Alpha 투명화
+        if (!_bBeingTouched && _fRotatingPower == 0 && _bgImg.color.a == 1)
+        {
+            _bgImg.CrossFadeAlpha(_fMinAlpha, 0.5f, true);
+        }
     }
 
     public float GetDegree()
@@ -113,9 +126,6 @@ public class SteerHelm : MonoBehaviour, IDragHandler, IPointerUpHandler, IPointe
         return _fDegree;
     }
 }
-
-
-
 
 /*
 using System.Collections;

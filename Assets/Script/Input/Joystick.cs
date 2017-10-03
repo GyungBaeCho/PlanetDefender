@@ -8,11 +8,16 @@ public class Joystick : MonoBehaviour, IDragHandler, IPointerUpHandler, IPointer
     private Image       _bgImg;
     private Image       _joystickImg;
     private Vector3     _inputVector;
+    private float       _fMinAlpha = 0.1f;
 
     // Use this for initialization
     void Start() {
         _bgImg = GetComponent<Image>();
         _joystickImg = transform.GetChild(0).GetComponent<Image>();
+
+        //투명화
+        _bgImg.CrossFadeAlpha(_fMinAlpha, 0.5f, true);
+        _joystickImg.CrossFadeAlpha(_fMinAlpha, 0.5f, true);
     }
 
     /*
@@ -40,6 +45,10 @@ public class Joystick : MonoBehaviour, IDragHandler, IPointerUpHandler, IPointer
     public virtual void OnPointerDown(PointerEventData ped)
     {
         OnDrag(ped);
+
+        //불투명화
+        _bgImg.CrossFadeAlpha(1, 0.5f, true);
+        _joystickImg.CrossFadeAlpha(1, 0.5f, true);
     }
 
     //터치를 중지했을때, inputVector와 Joystick 초기화.
@@ -47,6 +56,10 @@ public class Joystick : MonoBehaviour, IDragHandler, IPointerUpHandler, IPointer
     {
         _inputVector = Vector3.zero;
         _joystickImg.rectTransform.anchoredPosition = Vector3.zero;
+
+        //투명화
+        _bgImg.CrossFadeAlpha(_fMinAlpha, 0.5f, true);
+        _joystickImg.CrossFadeAlpha(_fMinAlpha, 0.5f, true);
     }
 
     public float GetHorizontalValue()

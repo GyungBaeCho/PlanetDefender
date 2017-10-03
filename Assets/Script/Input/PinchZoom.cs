@@ -2,13 +2,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+using GlobalVar;
+
 public class PinchZoom : MonoBehaviour {
     public float    _orthoZoomSpeed = 0.5f;
+    public float    _zoomMin;
+    public float    _zoomMax;
 
-	// Use this for initialization
-	void Start () {
-		
-	}
+    // Use this for initialization
+    void Start () {
+        GlobalVariable._minZoom = _zoomMin;
+        GlobalVariable._maxZoom = _zoomMax;
+    }
 	
 	// Update is called once per frame
 	void Update ()
@@ -31,8 +36,8 @@ public class PinchZoom : MonoBehaviour {
             {
                 Camera.main.orthographicSize += deltaMagnitudeDiff * _orthoZoomSpeed;
 
-                Camera.main.orthographicSize = Mathf.Min(Camera.main.orthographicSize, 1000);
-                Camera.main.orthographicSize = Mathf.Max(Camera.main.orthographicSize, 300);
+                Camera.main.orthographicSize = Mathf.Min(Camera.main.orthographicSize, _zoomMax);
+                Camera.main.orthographicSize = Mathf.Max(Camera.main.orthographicSize, _zoomMin);
 
             }
             //Perspective View
@@ -42,9 +47,23 @@ public class PinchZoom : MonoBehaviour {
             }
         }
 
+        //PC MouseWHeel
+        if (Input.touchCount == 0)
+        {
+            //OrthoGraphic VIew
+            if (Camera.main.orthographic == true)
+            {
+                Camera.main.orthographicSize -= Input.mouseScrollDelta.y;
 
+                Camera.main.orthographicSize = Mathf.Min(Camera.main.orthographicSize, _zoomMax);
+                Camera.main.orthographicSize = Mathf.Max(Camera.main.orthographicSize, _zoomMin);
 
+            }
+            //Perspective View
+            else
+            {
+
+            }
+        }
     }
-
-
 }

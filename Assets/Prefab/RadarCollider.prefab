@@ -65,8 +65,8 @@ PolygonCollider2D:
   m_AutoTiling: 0
   m_Points:
     m_Paths:
-    - - {x: 5, y: 10}
-      - {x: -5, y: 10}
+    - - {x: 3, y: 10}
+      - {x: -3, y: 10}
       - {x: 0, y: 0}
 --- !u!114 &114770965511182272
 MonoBehaviour:
@@ -79,5 +79,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 418054cbad1ac3845a6572eb7f537424, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _collisionPrefab: {fileID: 0}
   _maxRotatingPower: 50

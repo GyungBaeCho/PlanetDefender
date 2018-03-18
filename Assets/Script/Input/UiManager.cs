@@ -3,14 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class ChangeScene : MonoBehaviour
+public class UiManager : MonoBehaviour
 {
+    public GameObject _optionPanel;
+
     public string _sceneName;
 
     // Use this for initialization
     void Start()
     {
-
+        _optionPanel.SetActive(false);
     }
 
     // Update is called once per frame
@@ -23,4 +25,17 @@ public class ChangeScene : MonoBehaviour
     {
         SceneManager.LoadScene(_sceneName);
     }
+
+    public void OnOffOption()
+    {
+        if (_optionPanel.active == true)
+        {
+            _optionPanel.SetActive(false);
+        }
+        else
+        {
+            _optionPanel.SetActive(true);
+        }
+    }
+
 }

@@ -2,16 +2,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+using GlobalVar;
+
 public class HpStatus : MonoBehaviour {
     public float    _maxHp = 0;
     public float    _recoverHp = 0;
 
     private float   _hp = 0;
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start () {
         _hp = _maxHp;
-
     }
 	
 	// Update is called once per frame
@@ -41,5 +42,10 @@ public class HpStatus : MonoBehaviour {
     public float GetHp()
     {
         return _hp;
+    }
+
+    public float GetPerecentage()
+    {
+        return _hp / _maxHp;
     }
 }

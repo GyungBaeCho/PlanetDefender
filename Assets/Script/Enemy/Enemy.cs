@@ -2,15 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Enemy : MonoBehaviour {
-    public GameObject   _hpBarPrefab;
+using GlobalVar;
 
+public class Enemy : MonoBehaviour {
     //Status
     private HpStatus    _hpStatus;
 
     // Use this for initialization
     void Start () {
-        Instantiate(_hpBarPrefab, transform);
         _hpStatus = transform.root.gameObject.GetComponent<HpStatus>();
     }
 

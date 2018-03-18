@@ -42,4 +42,10 @@ public class DamageStatus : MonoBehaviour
         //_rand 값을 통해 +-a 값의 데미지를 반환한다.
         return Random.Range(_damage-_rand, _damage+_rand);
     }
+
+    public string GetInfo()
+    {
+        string info = "Damage : " + _damage + " ± " + _rand;
+        return info;
+    }
 }

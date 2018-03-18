@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HomeRotating : MonoBehaviour {
+public class Rotate2Target : MonoBehaviour {
     public float        _maxRotatingPower = 0;
 
     private GameObject  _targetObject = null;
@@ -49,7 +49,6 @@ public class HomeRotating : MonoBehaviour {
             //두 벡터 사이각도를 구하기 위함
             float fDot = Vector2.Dot(vMove, vTarget);
             float fDegree = Mathf.Acos(fDot) * Mathf.Rad2Deg;
-
 
             //외적을 통한 Z값 추출(회전 방향)
             if (((vMove.x * vTarget.y) - (vMove.y * vTarget.x)) < 0)

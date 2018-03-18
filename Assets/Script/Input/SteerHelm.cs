@@ -11,18 +11,28 @@ public class SteerHelm : MonoBehaviour, IDragHandler, IPointerUpHandler, IPointe
     private bool            _bFirstTouch = true;
     private bool            _bBeingTouched = false;
 
+    private int             _idxDegree;
+    private float[]         _arrDegree;
+
     private float           _fDegree = 0;
+
     private float           _fRotatingPower = 0;
-    private float           _fMinAlpha = 0.1f;
+
+    public float            _fMinAlpha = 0.1f;
+    public float            _fMaxAlpha = 0.7f;
+    public float            _fAlphaDurationTime = 0.5f;
 
     public float            _fFriction;
     public float            _fTouchFriction;
     public Planet           _planet;
 
+
     // Use this for initialization
     void Start ()
     {
         _bgImg = GetComponent<Image>();
+        _arrDegree = new float[1];
+        _idxDegree = 0;
     }
 
     public virtual void OnDrag(PointerEventData ped)
@@ -39,22 +49,26 @@ public class SteerHelm : MonoBehaviour, IDragHandler, IPointerUpHandler, IPointe
                 Vector2 vCenter = RectTransformUtility.WorldToScreenPoint(ped.pressEventCamera, transform.position);
                 Vector2 vNew = (ped.position - vCenter).normalized;
                 Vector2 vPre = (_prePos - vCenter).normalized;
+                _fDegree = CalculateDegree(vCenter, vNew, vPre);
 
-                //두 벡터 사이각도를 구하기 위함
-                float fDot = Vector2.Dot(vNew, vPre);
-                _fDegree = Mathf.Acos(fDot) * Mathf.Rad2Deg;
-
-                //외적을 통한 Z값 추출(회전 방향)
-                if (((vNew.x * vPre.y) - (vNew.y * vPre.x)) > 0) {
-                    _fDegree = -_fDegree;
+                _arrDegree[_idxDegree++] = _fDegree;
+                if (_arrDegree.Length == _idxDegree)
+                {
+                    _idxDegree = 0;
                 }
-                
-                transform.Rotate(0, 0, _fDegree);
+
+                if (_fDegree != 0 && Mathf.Abs(_fRotatingPower) < 5)
+                {
+                    transform.Rotate(0, 0, _fDegree);
+                }
             }
+
             _prePos = ped.position;
-            
+
             //Planet이 현재 조종하는 Tower를 회전시킵니다.
-            _planet.RevoluteTower(_fDegree);
+            if (_fRotatingPower == 0) {
+                _planet.RevoluteTower(_fDegree);
+            }
         }
     }
 
@@ -63,7 +77,7 @@ public class SteerHelm : MonoBehaviour, IDragHandler, IPointerUpHandler, IPointe
         _bBeingTouched = true;
 
         //터치시 UI Alpha 최대 불투명
-        _bgImg.CrossFadeAlpha(1, 0.5f, true);
+        _bgImg.CrossFadeAlpha(_fMaxAlpha, _fAlphaDurationTime, true);
     }
 
     //터치를 중지했을때 firstThouch 초기화
@@ -71,11 +85,32 @@ public class SteerHelm : MonoBehaviour, IDragHandler, IPointerUpHandler, IPointe
     {
         _bFirstTouch = true;
         _bBeingTouched = false;
-        if (_fRotatingPower == 0)
+
+        float fAvgDegree = 0;
+        for (int i=0; i<_arrDegree.Length ; ++i)
         {
-            _fRotatingPower = _fDegree * 20;
+            fAvgDegree += _arrDegree[i];
+            _arrDegree[i] = 0;
         }
-        _fDegree = 0;
+        fAvgDegree /= _arrDegree.Length;
+
+        if (_fRotatingPower == 0) {
+            _fRotatingPower = fAvgDegree * 15;
+        }
+        else if (Mathf.Sign(_fRotatingPower) == Mathf.Sign(fAvgDegree))
+        {
+            if (Mathf.Abs(_fRotatingPower) < Mathf.Abs(fAvgDegree)*15)
+            {
+                _fRotatingPower = fAvgDegree * 15;
+            }
+        }
+        //else
+        //{
+        //    if (Mathf.Abs(_fRotatingPower) < Mathf.Abs(_fDegree))
+        //    {
+        //    //    _fRotatingPower += _fDegree * 15;
+        //    }
+        //}
     }
 
     // Update is called once per frame
@@ -85,6 +120,7 @@ public class SteerHelm : MonoBehaviour, IDragHandler, IPointerUpHandler, IPointe
         {
             float sign = Mathf.Sign(_fRotatingPower);
             float fFrictionPower = -sign * Time.deltaTime;
+
             if (_bBeingTouched)
             {
                 fFrictionPower *= _fTouchFriction;
@@ -110,15 +146,29 @@ public class SteerHelm : MonoBehaviour, IDragHandler, IPointerUpHandler, IPointe
                 }
             }
 
-            _planet.RevoluteTower(_fRotatingPower/10);
+            _planet.RevoluteTower(_fRotatingPower/15);
             transform.Rotate(0, 0, _fRotatingPower * Time.deltaTime);   
         }
 
         //비터치시, RotatingPower Zero시 UI Alpha 투명화
         if (!_bBeingTouched && _fRotatingPower == 0 && _bgImg.color.a == 1)
         {
-            _bgImg.CrossFadeAlpha(_fMinAlpha, 0.5f, true);
+            _bgImg.CrossFadeAlpha(_fMinAlpha, _fAlphaDurationTime, true);
         }
+    }
+
+    private float CalculateDegree(Vector2 vCenter, Vector2 vNew, Vector2 vPre)
+    {
+        //두 벡터 사이각도를 구하기 위함
+        float fDot = Vector2.Dot(vNew, vPre);
+        float fDegree = Mathf.Acos(fDot) * Mathf.Rad2Deg;
+
+        //외적을 통한 Z값 추출(회전 방향)
+        if (((vNew.x * vPre.y) - (vNew.y * vPre.x)) > 0)
+        {
+            fDegree = -fDegree;
+        }
+        return fDegree;
     }
 
     public float GetDegree()

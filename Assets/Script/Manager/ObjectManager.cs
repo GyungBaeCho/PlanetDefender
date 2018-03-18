@@ -7,16 +7,29 @@ using GlobalVar;
 public class ObjectManager : MonoBehaviour {
 
     public GameObject[]         _arrEnemyPrefab;
+    public string[]             _arrKeys;
+    public GameObject[]         _arrPrefabs;
 
     private List<GameObject>    _lstEnemy;
     private float               _fTimeCount = 0;
     private Vector2             _worldSize;
+
+    private void Awake()
+    {
+    }
 
     // Use this for initialization
     void Start ()
     {
         _lstEnemy = new List<GameObject>();
         _worldSize = GlobalVariable._worldCollider.size / 2;
+
+        for (int i=0; i<_arrKeys.Length ;++i) {
+            if (_arrKeys[i]!=null && _arrPrefabs[i]!=null)
+            {
+                GlobalVariable._dicPrefabs.Add(_arrKeys[i], _arrPrefabs[i]);
+            }
+        }
     }
 
     void CreateEnemy()

@@ -61,7 +61,7 @@ public class Planet : MonoBehaviour
         //    print("Shit!");
         //}
 
-        transform.Rotate(0, 0, fDegree / 100);
+        transform.Rotate(0, 0, fDegree / 10);
 
     }
 

@@ -25,6 +25,7 @@ public class Joystick : MonoBehaviour, IDragHandler, IPointerUpHandler, IPointer
     */
     public virtual void OnDrag(PointerEventData ped)
     {
+
         Vector2 pos;
         if (RectTransformUtility.ScreenPointToLocalPointInRectangle(_bgImg.rectTransform, ped.position, ped.pressEventCamera, out pos)) {
             // bgImg 내부 로컬 좌표를 bgImg Size로 나눔으로써
@@ -32,12 +33,14 @@ public class Joystick : MonoBehaviour, IDragHandler, IPointerUpHandler, IPointer
             pos.x = (pos.x / _bgImg.rectTransform.sizeDelta.x);
             pos.y = (pos.y / _bgImg.rectTransform.sizeDelta.y);
 
-            _inputVector = new Vector3(pos.x * 2 + 1, pos.y * 2 - 1, 0);
+            _inputVector = new Vector3(pos.x, pos.y, 0);
             _inputVector = (_inputVector.magnitude > 1.0f) ? _inputVector.normalized : _inputVector;
 
+            print(_inputVector);
+
             //터치된 지점으로 Joystick Img 이동
-            _joystickImg.rectTransform.anchoredPosition = new Vector3(_inputVector.x * (_bgImg.rectTransform.sizeDelta.x / 3),
-                                                                     _inputVector.y * (_bgImg.rectTransform.sizeDelta.y / 3));
+            _joystickImg.rectTransform.anchoredPosition = new Vector3(_inputVector.x * (_bgImg.rectTransform.sizeDelta.x /3),
+                                                                     _inputVector.y * (_bgImg.rectTransform.sizeDelta.y /3));
         }
     }
 

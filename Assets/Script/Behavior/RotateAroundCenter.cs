@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HpBar : MonoBehaviour {
+public class RotateAroundCenter : MonoBehaviour {
     //Root Object의 BoxCollider 크기
     public float    _rootMagnitude = 0;
 
@@ -10,21 +10,20 @@ public class HpBar : MonoBehaviour {
     void Start () {
         Collider2D rootCollider = transform.root.GetComponent<Collider2D>();
 
-        //Root Object에 Collider가 없다면 종료합니다.
-        if (rootCollider == null)
-        {
-            Destroy(transform.gameObject);
-            return;
-        }
-
         //Collider의 종류가 BoxCollider라면
         if (rootCollider.GetType() == typeof(BoxCollider2D))
         {
+            rootCollider.gameObject.GetComponentInChildren<BoxCollider2D>();
+
             BoxCollider2D rootBoxCollider = (BoxCollider2D)rootCollider;
             Vector2 colliderSize = rootBoxCollider.size;
             colliderSize.x *= transform.root.localScale.x;
-            colliderSize.y *= transform.root.localScale.x;
-            _rootMagnitude = colliderSize.magnitude * 0.75f;
+            colliderSize.y *= transform.root.localScale.y;
+            _rootMagnitude = colliderSize.magnitude;
+        }
+        else
+        {
+            _rootMagnitude = 1;
         }
     }
 
@@ -60,9 +59,6 @@ public class HpBar : MonoBehaviour {
     private void Update () {
         UpdateRotation();
         UpdatePosition();
-
-        float hp = transform.root.gameObject.GetComponent<HpStatus>().GetHp();
-        transform.localScale = new Vector3(hp/100.0f, 1, 1);
 
         //Vector3 position = transform.root.position;
         //Vector3 up = (position - Vector3.zero).normalized;
